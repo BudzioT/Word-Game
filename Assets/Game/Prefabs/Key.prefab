@@ -270,6 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   letterText: {fileID: 2505567314013479483}
+  keyRenderer: {fileID: 4840516842980706779}
 --- !u!114 &8574333266166498948
 MonoBehaviour:
   m_ObjectHideFlags: 0

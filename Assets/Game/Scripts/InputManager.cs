@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Button submitButton;
     
     // Keyboard colorizer
-    [SerializeField] private KeyboardColorizer _keyboardColorizer;
+    [SerializeField] private KeyboardColorizer keyboardColorizer;
     
     // Current word index
     [Header("Settings")] private int _wordContainerIndex;
