@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -30,12 +31,19 @@ public class InputManager : MonoBehaviour
         Key.OnKeyPressed += AddLetter;
     }
     
+    // Free the components on destroy
+    private void OnDestroy()
+    {
+        // Unassign the letter add function from the actions
+        Key.OnKeyPressed -= AddLetter;
+    }
+
     // Initialize the manager
     private void Initialize()
     {
         // Go through every word container and initialize it
-        for (int i = 0; i < wordContainers.Length; ++i)
-            wordContainers[i].Initialize();
+        foreach (var word in wordContainers)
+            word.Initialize();
     }
     
     // Add a letter to the word
@@ -72,10 +80,10 @@ public class InputManager : MonoBehaviour
         // Also set the color of the keyboard letter
         keyboardColorizer.SetColor(keyword, word);
         
-        // If there are the same, complete the game
+        // If there are the same, complete the level
         if (word == keyword)
         {
-            Debug.Log("COMPLETE!");
+            SetLevelComplete();
         }
 
         // Otherwise move to the next line
@@ -117,5 +125,11 @@ public class InputManager : MonoBehaviour
     private void DisableSubmit()
     {
         submitButton.interactable = false;
+    }
+    
+    // Set level as completed
+    private void SetLevelComplete()
+    {
+        GameManager.Instance.SetState(GameStates.Complete);
     }
 }
