@@ -18,6 +18,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CanvasGroup completeCg;
     // Game's over canvas group
     [SerializeField] private CanvasGroup gameOverCg;
+    // Menu's canvas group
+    [SerializeField] private CanvasGroup menuCg;
+
+    [Header("Menu Elements")]
+    // Menu visible statistics
+    [SerializeField] private TextMeshProUGUI menuCoins;
+    [SerializeField] private TextMeshProUGUI menuHighscore;
 
     [Header("Complete Elements")] 
     // Word that shows when level's completed
@@ -131,6 +138,23 @@ public class UIManager : MonoBehaviour
     private void HideGame()
     {
         Hide(gameCg);
+    }
+    
+    // Show menu
+    private void ShowMenu()
+    {
+        // Update menu data
+        menuCoins.text = DataManager.Instance.GetCoins().ToString();
+        menuHighscore.text = DataManager.Instance.GetHighscore().ToString();
+        
+        // Show the menu
+        Show(menuCg);
+    }
+    
+    // Hide menu
+    private void HideMenu()
+    {
+        Hide(menuCg);
     }
     
     // Show level's complete screen

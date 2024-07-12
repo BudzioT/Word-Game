@@ -18,23 +18,9 @@ public class HintManager : MonoBehaviour
         _keys = keyboard.GetComponentsInChildren<Key>();
     }
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
     // Give a hint with keyboard keys
     public void KeyboardHint()
     {
-        Debug.Log("KEYBOARD HINT!");
-        
         // Get the keyword
         string keyword = WordManager.Instance.GetKeyword();
         // Store a list of not affected keys
@@ -70,6 +56,36 @@ public class HintManager : MonoBehaviour
     // Give a hint by adding letters
     public void LetterHint()
     {
+        // Return if all letter hints are used up already
+        if (_letterHintIndices.Count >= 5)
+        {
+            Debug.Log("HINTS ARE ALL USED UP");
+            return;
+        }
+
+        // List with new letter hint indices
+        List<int> newHintIndices = new List<int>();
+        // Add not yet used indices into the new list, based off used ones
+        for (int i = 0; i < 5; ++i)
+        {
+            if (!_letterHintIndices.Contains(i))
+                newHintIndices.Add(i);
+        }
+        
+        // Get the currently used word container
+        WordContainer wordContainer = InputManager.Instance.GetWordContainer();
+        
+        // Store the keyword
+        string keyword = WordManager.Instance.GetKeyword();
+        
+        // Choose a random index from not yet given hints
+        int randomIndex = newHintIndices[Random.Range(0, newHintIndices.Count)];
+        // Add it to the already used ones
+        _letterHintIndices.Add(randomIndex);
+        
+        // Add the letter with a hint
+        wordContainer.AddWithHint(randomIndex, keyword[randomIndex]);
+        
         Debug.Log("LETTER HINT!");
     }
 }
