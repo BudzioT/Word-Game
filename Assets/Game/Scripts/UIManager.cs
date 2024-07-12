@@ -59,10 +59,13 @@ public class UIManager : MonoBehaviour
     // On start, initialize the components
     private void Start()
     {
-        // Hide level's completion screen
+        // Show the start menu
+        ShowMenu();
+        
+        // Hide the other canvas groups
+        HideGame();
         HideComplete();
-        // Show game as the first screen
-        ShowGame();
+        HideGameOver();
         
         // Assign game's state change function as a callback
         GameManager.StateChanged += StateChange;
@@ -79,8 +82,17 @@ public class UIManager : MonoBehaviour
                 // Show its screen
                 ShowGame();
                 // Hide the other screens
+                HideMenu();
                 HideComplete();
                 HideGameOver();
+                break;
+            
+            // When user goes into menu
+            case GameStates.Menu:
+                // Show menu
+                ShowMenu();
+                // Hide the game
+                HideGame();
                 break;
             
             // When level is completed

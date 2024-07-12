@@ -18,6 +18,9 @@ public class WordManager : MonoBehaviour
     // Available words
     private string _words;
 
+    // Reset the word flag
+    [Header("Settings")] private bool _reset;
+
     // Prepare the word manager on awakening
     private void Awake()
     {
@@ -38,6 +41,16 @@ public class WordManager : MonoBehaviour
     {
         // Choose a new keyword
         SetNewKeyword();
+        
+        // Assign a new callback when changing game states
+        GameManager.StateChanged += StateChanged;
+    }
+    
+    // Clean the resources on destroy
+    private void OnDestroy()
+    {
+        // Unassign the state change callback
+        GameManager.StateChanged -= StateChanged;
     }
 
     // Return the game's keyword, formatted to upper case
@@ -61,5 +74,39 @@ public class WordManager : MonoBehaviour
         
         // Set the new word as keyword
         keyword = _words.Substring(wordStart, 5).ToUpper();
+        
+        // Turn off the reset flag
+        _reset = false;
+    }
+
+    // Handle changing state
+    private void StateChanged(GameStates state)
+    {
+        // Handle it depending on the state
+        switch (state)
+        {
+            // Going into menu
+            case GameStates.Menu:
+                break;
+            
+            // Playing the game
+            case GameStates.Game:
+                // If reset flag is true, choose a new keyword
+                if (_reset)
+                    SetNewKeyword();
+                break;
+            
+            // Completing a level
+            case GameStates.Complete:
+                // Set the reset flag
+                _reset = true;
+                break;
+            
+            // Losing
+            case GameStates.Lost:
+                // Turn on the reset flag
+                _reset = true;
+                break;
+        }
     }
 }

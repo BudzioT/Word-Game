@@ -10,6 +10,9 @@ public class KeyboardColorizer : MonoBehaviour
 {
     // Array of keys
     [Header("Elements")] private Key[] _keys;
+    
+    // Reset word flag
+    [Header("Settings")] private bool _reset;
 
     // Initialize the colorizer
     private void Awake()
@@ -71,13 +74,25 @@ public class KeyboardColorizer : MonoBehaviour
         {
             // On going into game
             case GameStates.Game:
-                // Initialize keyboard
-                Initialize();
-
+                // Initialize keyboard if game should reset
+                if (_reset)
+                    Initialize();
                 break;
             
             // On completing a level
             case GameStates.Complete:
+                // Initialize keyboard
+                if (_reset)
+                    Initialize();
+                
+                // Turn off the reset flag
+                _reset = false;
+                break;
+            
+            // On losing
+            case GameStates.Lost:
+                // Switch off the reset flag
+                _reset = false;
                 break;
         }
     }
@@ -88,5 +103,8 @@ public class KeyboardColorizer : MonoBehaviour
         // Initialize every key
         foreach (var key in _keys)
             key.Initialize();
+        
+        // Make the game not reset
+        _reset = false;
     }
 }

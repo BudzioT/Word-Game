@@ -18,11 +18,14 @@ public class InputManager : MonoBehaviour
     // Keyboard colorizer
     [SerializeField] private KeyboardColorizer keyboardColorizer;
     
-    // Current word index
-    [Header("Settings")] private int _wordContainerIndex;
     
+    [Header("Settings")] 
+    // Current word index
+    private int _wordContainerIndex;
     // Can add letter flag
     private bool _canAddLetter = true;
+    // Reset the word flag
+    private bool _reset;
     
     // On script's awakening, make sure to remain only one copy of this class
     private void Awake()
@@ -67,6 +70,9 @@ public class InputManager : MonoBehaviour
         // Go through every word container and initialize it
         foreach (var word in wordContainers)
             word.Initialize();
+        
+        // Turn off the reset flag, it word doesn't need to be changed when already created
+        _reset = false;
     }
     
     // Add a letter to the word
@@ -198,13 +204,21 @@ public class InputManager : MonoBehaviour
         {
             // On starting game
             case GameStates.Game:
-                // Initialize it
-                Initialize();
-
+                // If game should reset, initialize it
+                if (_reset)
+                    Initialize();
                 break;
             
             // On completing a level
             case GameStates.Complete:
+                // Set the reset flag
+                _reset = true;
+                break;
+            
+            // On losing
+            case GameStates.Lost:
+                // Turn the reset flag
+                _reset = true;
                 break;
         }
     }

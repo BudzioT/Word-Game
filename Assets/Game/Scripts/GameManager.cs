@@ -45,6 +45,18 @@ public class GameManager : MonoBehaviour
     {
         SetState(GameStates.Game);
     }
+    
+    // Play the game
+    public void Play()
+    {
+        SetState(GameStates.Game);
+    }
+    
+    // Go back to menu
+    public void GoBack()
+    {
+        SetState(GameStates.Menu);
+    }
 
     // Set the current state of game
     public void SetState(GameStates state)

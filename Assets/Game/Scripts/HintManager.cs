@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class HintManager : MonoBehaviour
 {
@@ -10,6 +12,9 @@ public class HintManager : MonoBehaviour
     // Array of keys
     private Key[] _keys;
     
+    // Reset flag
+    [Header("Settings")] private bool _reset;
+    
     // List of given hint indices
     private List<int> _letterHintIndices = new List<int>();
 
@@ -18,6 +23,20 @@ public class HintManager : MonoBehaviour
         _keys = keyboard.GetComponentsInChildren<Key>();
     }
     
+    // On start, add components
+    private void Start()
+    {
+        // Add state change callback
+        GameManager.StateChanged += StateChanged;
+    }
+    
+    // Deallocate components on destroy
+    private void OnDestroy()
+    {
+        // Remove the state change callback
+        GameManager.StateChanged -= StateChanged;
+    }
+
     // Give a hint with keyboard keys
     public void KeyboardHint()
     {
@@ -85,7 +104,39 @@ public class HintManager : MonoBehaviour
         
         // Add the letter with a hint
         wordContainer.AddWithHint(randomIndex, keyword[randomIndex]);
-        
-        Debug.Log("LETTER HINT!");
+    }
+    
+    // Handle changing state
+    private void StateChanged(GameStates state)
+    {
+        // Check to which state does the app change
+        switch (state)
+        {
+            // Into menu
+            case GameStates.Menu:
+                break;
+            
+            // Into game
+            case GameStates.Game:
+                // If reset flag is true, clear the hints and turn off the flag
+                if (_reset)
+                {
+                    _letterHintIndices.Clear();
+                    _reset = false;
+                }
+                break;
+            
+            // Into level complete
+            case GameStates.Complete:
+                // Set the reset flag
+                _reset = true;
+                break;
+            
+            // Into game over
+            case GameStates.Lost:
+                // Turn reset flag
+                _reset = true;
+                break;
+        }
     }
 }
