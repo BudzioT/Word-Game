@@ -11,6 +11,8 @@ public class InputManager : MonoBehaviour
     // Button to submit the answer
     [SerializeField] private Button submitButton;
     
+    // Keyboard colorizer
+    [SerializeField] private KeyboardColorizer _keyboardColorizer;
     
     // Current word index
     [Header("Settings")] private int _wordContainerIndex;
@@ -54,9 +56,6 @@ public class InputManager : MonoBehaviour
             
             // Enable the submit button
             EnableSubmit();
-
-            //CheckWord();
-            //++_wordContainerIndex;
         }
     }
     
@@ -67,6 +66,11 @@ public class InputManager : MonoBehaviour
         string word = wordContainers[_wordContainerIndex].GetWord();
         // Store the keyword
         string keyword = WordManager.Instance.GetKeyword();
+               
+        // Set color of the word letters based of their state
+        wordContainers[_wordContainerIndex].SetColor(keyword);
+        // Also set the color of the keyboard letter
+        keyboardColorizer.SetColor(keyword, word);
         
         // If there are the same, complete the game
         if (word == keyword)

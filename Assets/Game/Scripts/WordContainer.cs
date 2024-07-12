@@ -74,4 +74,42 @@ public class WordContainer : MonoBehaviour
         // Return the result word
         return word;
     }
+
+    // Set the color of the letters
+    public void SetColor(string keyword)
+    {
+        // Split the keyword into characters, store them in a list
+        List<char> keywordChars = new List<char>(keyword.ToCharArray());
+        
+        // Go through each of current word's letters
+        for (int i = 0; i < _letterContainers.Length; ++i)
+        {
+            // Get the current letter
+            char letter = _letterContainers[i].GetLetter();
+            
+            // Check if it's correct
+            if (letter == keyword[i])
+            {
+                // Set is as valid
+                _letterContainers[i].SetCorrect();
+                // Remove it from the letters to check
+                keywordChars.Remove(letter);
+            }
+            
+            // Check if it's somewhere else
+            else if (keywordChars.Contains(letter))
+            {
+                // Set is as potential letter
+                _letterContainers[i].SetPotential();
+                // Remove it
+                keywordChars.Remove(letter);
+            }
+            
+            // Otherwise set it as invalid
+            else
+            {
+                _letterContainers[i].SetWrong();
+            }
+        }
+    }
 }
