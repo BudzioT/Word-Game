@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
+    // static instance of this class
+    public static InputManager Instance;
+    
     // Word containers
     [Header("Elements")] [SerializeField] private WordContainer[] wordContainers;
     // Button to submit the answer
@@ -21,6 +24,15 @@ public class InputManager : MonoBehaviour
     // Can add letter flag
     private bool _canAddLetter = true;
     
+    // On script's awakening, make sure to remain only one copy of this class
+    private void Awake()
+    {
+        if (!Instance)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
+
     // Prepare manager at the start
     void Start()
     {
@@ -100,21 +112,39 @@ public class InputManager : MonoBehaviour
         // Otherwise move to the next line
         else
         {
-            // Allow adding letters again
-            _canAddLetter = true;
             // Disable the submit button
             DisableSubmit();
             
-            Debug.Log("WRONG!");
-            
             // Move to the next line
             ++_wordContainerIndex;
+
+            // If this was the lasts possible word guess, handle game over
+            if (_wordContainerIndex >= wordContainers.Length)
+            {
+                Debug.Log("GAME OVER!");
+                
+                // Reset the score
+                DataManager.Instance.ResetScore();
+                
+                // Set current state to lost
+                GameManager.Instance.SetState(GameStates.Lost);
+            }
+            // Otherwise, continue the game
+            else
+            {
+                // Allow keyboard input
+                _canAddLetter = true;
+            }
         }
     }
 
     // Handle backspace being pressed
     public void BackspacePress()
     {
+        // If user isn't in the game, return
+        if (!GameManager.Instance.GameState())
+            return;
+        
         // Remove the current letter and store if it was successful
         bool removed = wordContainers[_wordContainerIndex].Remove();
         
@@ -177,5 +207,11 @@ public class InputManager : MonoBehaviour
             case GameStates.Complete:
                 break;
         }
+    }
+
+    // Return the currently used word container
+    public WordContainer GetWordContainer()
+    {
+        return wordContainers[_wordContainerIndex];
     }
 }

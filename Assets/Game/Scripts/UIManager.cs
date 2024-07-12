@@ -158,5 +158,14 @@ public class UIManager : MonoBehaviour
         gameOverWord.text = WordManager.Instance.GetKeyword();
         gameOverCoins.text = DataManager.Instance.GetCoins().ToString();
         gameOverHighscore.text = DataManager.Instance.GetHighscore().ToString();
+        
+        // Show the canvas group
+        Show(gameOverCg);
+    }
+    
+    // Hide game over screen
+    private void HideGameOver()
+    {
+        Hide(gameOverCg);
     }
 }

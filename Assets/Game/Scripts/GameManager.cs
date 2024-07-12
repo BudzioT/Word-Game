@@ -58,4 +58,10 @@ public class GameManager : MonoBehaviour
         // Invoke the state changed action
         StateChanged?.Invoke(state);
     }
+    
+    // Return if the game is in play state
+    public bool GameState()
+    {
+        return _state == GameStates.Game;
+    }
 }

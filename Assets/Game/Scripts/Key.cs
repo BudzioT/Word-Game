@@ -85,6 +85,12 @@ public class Key : MonoBehaviour
         // Set the state
         _state = States.Wrong;
     }
+    
+    // Return if the key is unaffected by any states yet
+    public bool Untouched()
+    {
+        return _state == States.None;
+    }
 
     // Further initialize the key
     public void Initialize()

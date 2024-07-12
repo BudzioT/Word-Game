@@ -105,4 +105,12 @@ public class DataManager : MonoBehaviour
         // Save data
         Save();
     }
+    
+    // Reset player's score
+    public void ResetScore()
+    {
+        _score = 0;
+        // Save changes
+        Save();
+    }
 }

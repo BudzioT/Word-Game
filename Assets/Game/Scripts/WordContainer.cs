@@ -42,6 +42,12 @@ public class WordContainer : MonoBehaviour
         ++_letterIndex;
     }
     
+    // Add a letter using a hint
+    public void AddWithHint(int letterIndex, char letter)
+    {
+        _letterContainers[_letterIndex].SetLetter(letter, true);
+    }
+    
     // Handle removing letter
     public bool Remove()
     {

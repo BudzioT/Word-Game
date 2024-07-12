@@ -21,8 +21,12 @@ public class LetterContainer : MonoBehaviour
     }
     
     // Set the letter
-    public void SetLetter(char letter)
+    public void SetLetter(char letter, bool hint = false)
     {
+        // If user used a hint, displayed this color with a gray background, otherwise with a black one
+        this.letter.color = hint ? Color.gray : Color.black;
+
+        // Set the letter's text
         this.letter.text = letter.ToString();
     }
     
