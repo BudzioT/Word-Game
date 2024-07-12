@@ -8,18 +8,6 @@ public class LetterContainer : MonoBehaviour
 {
     // A single letter in the container
     [Header("Elements")] [SerializeField] private TextMeshPro letter;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     // Initialize the letter
     public void Initialize()
@@ -32,5 +20,11 @@ public class LetterContainer : MonoBehaviour
     public void SetLetter(char letter)
     {
         this.letter.text = letter.ToString();
+    }
+    
+    // Get the letter
+    public char GetLetter()
+    {
+        return letter.text[0];
     }
 }

@@ -21,18 +21,6 @@ public class WordContainer : MonoBehaviour
         // Initialize the script
         Initialize();
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     
     // Initialize the word container
     public void Initialize()
@@ -50,10 +38,40 @@ public class WordContainer : MonoBehaviour
         // Move to the next one
         ++_letterIndex;
     }
+    
+    // Handle removing letter
+    public bool Remove()
+    {
+        // If there aren't any letters, return
+        if (_letterIndex < 1)
+            return false;
+        
+        // Go back to the previous index
+        --_letterIndex;
+        // Reset it by initializing it again
+        _letterContainers[_letterIndex].Initialize();
+        
+        // Return success
+        return true;
+    }
 
     // Return if the current word is completed
     public bool IsComplete()
     {
         return _letterIndex >= 5;
+    }
+    
+    // Get the current word
+    public string GetWord()
+    {
+        // Variable to build the word
+        string word = "";
+
+        // Go through each letter and append it  to the word
+        for (int i = 0; i < _letterContainers.Length; ++i)
+            word += _letterContainers[i].GetLetter().ToString();
+        
+        // Return the result word
+        return word;
     }
 }
