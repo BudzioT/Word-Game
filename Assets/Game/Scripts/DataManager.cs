@@ -42,12 +42,6 @@ public class DataManager : MonoBehaviour
         
     }
     
-    // Get last keyword
-    public string GetKeyword()
-    {
-        return _keyword;
-    }
-    
     // Get player's amount of coins
     public int GetCoins()
     {

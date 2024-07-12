@@ -15,18 +15,29 @@ public class UIManager : MonoBehaviour
     // Main game's canvas group
     [SerializeField] private CanvasGroup gameCg;
     // Level's complete canvas group
-
     [SerializeField] private CanvasGroup completeCg;
+    // Game's over canvas group
+    [SerializeField] private CanvasGroup gameOverCg;
 
     [Header("Complete Elements")] 
     // Word that shows when level's completed
     [SerializeField] private TextMeshProUGUI completeWord;
     // Player's coins on level's completed screen
     [SerializeField] private TextMeshProUGUI completeCoins;
-
     // His score and highscore
     [SerializeField] private TextMeshProUGUI completeScore;
     [SerializeField] private TextMeshProUGUI completeHighscore;
+
+    [Header("Game Elements")] 
+    // Current score and coins, while in the game
+    [SerializeField] private TextMeshProUGUI gameScore;
+    [SerializeField] private TextMeshProUGUI gameCoins;
+
+    [Header("Game Over Elements")]
+    // Game over statistics
+    [SerializeField] private TextMeshProUGUI gameOverWord;
+    [SerializeField] private TextMeshProUGUI gameOverCoins;
+    [SerializeField] private TextMeshProUGUI gameOverHighscore;
     
     // Create components on script's awakening
     private void Awake()
@@ -56,11 +67,28 @@ public class UIManager : MonoBehaviour
         // Handle change, depending on the state
         switch (state)
         {
+            // When user goes into the game
+            case GameStates.Game:
+                // Show its screen
+                ShowGame();
+                // Hide the other screens
+                HideComplete();
+                HideGameOver();
+                break;
+            
             // When level is completed
             case GameStates.Complete:
                 // Show the level's complete screen
                 ShowComplete();
                 // Hide the game's screen
+                HideGame();
+                break;
+            
+            // When user lost
+            case GameStates.Lost:
+                // Show game over screen
+                ShowGameOver();
+                // Hide the game
                 HideGame();
                 break;
         }
@@ -91,6 +119,11 @@ public class UIManager : MonoBehaviour
     // Show the game's screen
     private void ShowGame()
     {
+        // Set correct text with amount of coins and score
+        gameCoins.text = DataManager.Instance.GetCoins().ToString();
+        gameScore.text = DataManager.Instance.GetScore().ToString();
+        
+        // Show the game
         Show(gameCg);
     }
 
@@ -104,7 +137,7 @@ public class UIManager : MonoBehaviour
     private void ShowComplete()
     {
         // Assign all the variable texts needed from the game's data
-        completeWord.text = DataManager.Instance.GetKeyword();
+        completeWord.text = WordManager.Instance.GetKeyword();
         completeCoins.text = DataManager.Instance.GetCoins().ToString();
         completeScore.text = DataManager.Instance.GetScore().ToString();
         completeHighscore.text = DataManager.Instance.GetHighscore().ToString();
@@ -116,5 +149,14 @@ public class UIManager : MonoBehaviour
     private void HideComplete()
     {
         Hide(completeCg);
+    }
+    
+    // Show game over screen
+    private void ShowGameOver()
+    {
+        // Get proper text variables
+        gameOverWord.text = WordManager.Instance.GetKeyword();
+        gameOverCoins.text = DataManager.Instance.GetCoins().ToString();
+        gameOverHighscore.text = DataManager.Instance.GetHighscore().ToString();
     }
 }

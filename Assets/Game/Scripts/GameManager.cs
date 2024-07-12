@@ -39,12 +39,21 @@ public class GameManager : MonoBehaviour
     {
         
     }
+    
+    // Go to the next level
+    public void NextLevel()
+    {
+        SetState(GameStates.Game);
+    }
 
     // Set the current state of game
     public void SetState(GameStates state)
     {
         // Set the state
         this._state = state;
+        
+        Debug.Log(_state);
+        Debug.Log(state);
         
         // Invoke the state changed action
         StateChanged?.Invoke(state);

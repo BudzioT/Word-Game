@@ -29,6 +29,8 @@ public class InputManager : MonoBehaviour
         
         // Assign a letter add function on press to the key
         Key.OnKeyPressed += AddLetter;
+        // Add function to go into the next level too
+        GameManager.StateChanged += StateChange;
     }
     
     // Free the components on destroy
@@ -36,11 +38,20 @@ public class InputManager : MonoBehaviour
     {
         // Unassign the letter add function from the actions
         Key.OnKeyPressed -= AddLetter;
+        // Delete the state change function too
+        GameManager.StateChanged += StateChange;
     }
 
     // Initialize the manager
     private void Initialize()
     {
+        // Reset the word's index, allow adding letters
+        _wordContainerIndex = 0;
+        _canAddLetter = true;
+        
+        // Disable submit button
+        DisableSubmit();
+        
         // Go through every word container and initialize it
         foreach (var word in wordContainers)
             word.Initialize();
@@ -130,6 +141,41 @@ public class InputManager : MonoBehaviour
     // Set level as completed
     private void SetLevelComplete()
     {
+        // Update game's data
+        UpdateData();
+        
+        // Set state to level completed
         GameManager.Instance.SetState(GameStates.Complete);
+    }
+
+    // Update game's information
+    private void UpdateData()
+    {
+        // Calculate score increase, based off amount of words used
+        int scoreIncrease = 6 - _wordContainerIndex;
+        
+        // Add it to the game's data
+        DataManager.Instance.IncreaseScore(scoreIncrease);
+        // Increase coins too
+        DataManager.Instance.IncreaseCoins(scoreIncrease * 2);
+    }
+    
+    // Handle game changing state
+    private void StateChange(GameStates state)
+    {
+        // Handle it depending on the state
+        switch (state)
+        {
+            // On starting game
+            case GameStates.Game:
+                // Initialize it
+                Initialize();
+
+                break;
+            
+            // On completing a level
+            case GameStates.Complete:
+                break;
+        }
     }
 }

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -14,6 +16,20 @@ public class KeyboardColorizer : MonoBehaviour
     {
         // Get the keys
         _keys = GetComponentsInChildren<Key>();
+    }
+    
+    // Add components to the keyboard colorizer
+    private void Start()
+    {
+        // Add state change callback
+        GameManager.StateChanged += StateChanged;
+    }
+    
+    // Free the components on destroy
+    private void OnDestroy()
+    {
+        // Delete state change callback
+        GameManager.StateChanged -= StateChanged;
     }
 
     // Set color of keys based off letters state
@@ -45,5 +61,32 @@ public class KeyboardColorizer : MonoBehaviour
                     _keys[i].SetWrong();
             }
         }
+    }
+
+    // Handle state changing
+    private void StateChanged(GameStates state)
+    {
+        // Handle changes correctly depending on the state
+        switch (state)
+        {
+            // On going into game
+            case GameStates.Game:
+                // Initialize keyboard
+                Initialize();
+
+                break;
+            
+            // On completing a level
+            case GameStates.Complete:
+                break;
+        }
+    }
+    
+    // Initialize the keyboard
+    private void Initialize()
+    {
+        // Initialize every key
+        foreach (var key in _keys)
+            key.Initialize();
     }
 }

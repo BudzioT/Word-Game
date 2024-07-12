@@ -25,6 +25,9 @@ public class WordContainer : MonoBehaviour
     // Initialize the word container
     public void Initialize()
     {
+        // Reset current letter's index
+        _letterIndex = 0;
+        
         // Go through each of the letters containers, initialize them
         for (int i = 0; i < _letterContainers.Length; ++i)
             _letterContainers[i].Initialize();
